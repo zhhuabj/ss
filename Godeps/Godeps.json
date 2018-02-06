@@ -1,0 +1,23 @@
+{
+	"ImportPath": "github.com/zhhuabj/ss",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/mitchellh/go-homedir",
+			"Rev": "b8bc1bf767474819792c23f32d8286a45736f1c6"
+		},
+		{
+			"ImportPath": "github.com/phayes/freeport",
+			"Comment": "1.0.2-7-ge27662a",
+			"Rev": "e27662a4a9d6b2083dfd7e7b5d0e30985daca925"
+		},
+		{
+			"ImportPath": "golang.org/x/net/proxy",
+			"Rev": "2fb46b16b8dda405028c50f7c7f0f9dd1fa6bfb1"
+		}
+	]
+}
