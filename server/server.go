@@ -14,7 +14,7 @@ type LsServer struct {
 // 新建一个服务端
 // 服务端的职责是:
 // 1. 监听来自本地代理客户端的请求
-// 2. 解密本地代理客户端请求的数据，解析 SOCKS5 协议，连接用户浏览器真正想要连接的远程服务器
+// 2. 解密本地代理客户端请求的数据，解析SOCKS5协议，连接用户浏览器真正想要连接的远程服务器
 // 3. 转发用户浏览器真正想要连接的远程服务器返回的数据的加密后的内容到本地代理客户端
 func New(password *core.Password, listenAddr *net.TCPAddr) *LsServer {
 	return &LsServer{
@@ -31,9 +31,7 @@ func (lsServer *LsServer) Listen(didListen func(listenAddr net.Addr)) error {
 	if err != nil {
 		return err
 	}
-
 	defer listener.Close()
-
 	if didListen != nil {
 		didListen(listener.Addr())
 	}
@@ -157,16 +155,15 @@ func (lsServer *LsServer) handleConn(localConn *net.TCPConn) {
 		lsServer.EncodeWrite(localConn, []byte{0x05, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00})
 	}
 
-	// 进行转发
-	// 从 localUser 读取数据发送到 dstServer
+	// 进行转发, 从localUser读取数据发送到 dstServer
 	go func() {
 		err := lsServer.DecodeCopy(dstServer, localConn)
 		if err != nil {
-			// 在 copy 的过程中可能会存在网络超时等 error 被 return，只要有一个发生了错误就退出本次工作
+			// 在copy的过程中可能会存在网络超时等error被return，只要有一个发生了错误就退出本次工作
 			localConn.Close()
 			dstServer.Close()
 		}
 	}()
-	// 从 dstServer 读取数据发送到 localUser，这里因为处在翻墙阶段出现网络错误的概率更大
+	// 从dstServer读取数据发送到localUser， 这里因为处在翻墙阶段出现网络错误的概率更大
 	lsServer.EncodeCopy(localConn, dstServer)
 }

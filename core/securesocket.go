@@ -11,7 +11,7 @@ const (
 	BufSize = 1024
 )
 
-// 加密传输的 TCP Socket
+// 加密传输的TCP Socket
 type SecureSocket struct {
 	Cipher     *Cipher
 	ListenAddr *net.TCPAddr
@@ -86,7 +86,7 @@ func (secureSocket *SecureSocket) DecodeCopy(dst *net.TCPConn, src *net.TCPConn)
 func (secureSocket *SecureSocket) DialRemote() (*net.TCPConn, error) {
 	remoteConn, err := net.DialTCP("tcp", nil, secureSocket.RemoteAddr)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("连接到远程服务器 %s 失败:%s", secureSocket.RemoteAddr, err))
+		return nil, errors.New(fmt.Sprintf("Failed to connect the remote server %s Reason:%s", secureSocket.RemoteAddr, err))
 	}
 	return remoteConn, nil
 }

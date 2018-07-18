@@ -11,20 +11,25 @@ import (
 )
 
 var version = "master"
+const DefaultPassword = "NIOXTjvBR71xQHtZ1YELJqLgdmKGLKeZxo0XPKa2M5whAD1asqpXs2sBclgtdS/1RF9ud5rIlhSCeYtbkyMDYRldG/Bw3MnuidgnFdTPzOQusXQHRSvTkmX9VNlQuTLXnU3bc3iuZPbe/8XhMOz8NkrCFiXontYCytHqjH6Pw2oGwI6gzn9RtTjjXClSEJBBTNrn64Uobx4NkfLt8woEqKS0Xq2hTzUaPxhpx5TlmBGvVW3fuPljvPTxSaM+DvtsZnoPpd0qn/jQhzm7Ih3ifNJTgCQxfYpgQ/73y2cgaBKwCamEq7eVRs0fBelWQpv6SBMMOr6sxAhLv+83uuYciA=="
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-
-	// random port
-	port, err := freeport.GetFreePort()
-	if err != nil {
-		port = 7448
-	}
-	config := &config.Config{
-		ListenAddr: fmt.Sprintf(":%d", port),
-		Password: core.RandPassword().String(),
-	}
+	config := &config.Config{}
 	config.ReadConfig()
+	if len(config.ListenAddr) == 0 {
+		// random port
+		port, err := freeport.GetFreePort()
+		if err != nil {
+			port = 8388
+		}
+		config.SetListenAddr(fmt.Sprintf(":%d", port))
+	}
+	// Just use defaut password when .ss.config doesn't configure password
+	if len(config.Password) == 0 {
+//		config.SetPassword(core.RandPassword().String())
+		config.SetPassword(DefaultPassword)
+	}
 	config.SaveConfig()
 
 	password, err := core.ParsePassword(config.Password)

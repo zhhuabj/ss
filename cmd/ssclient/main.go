@@ -1,7 +1,5 @@
 package main
 
-// from https://github.com/gwuhaolin/lightsocks
-
 import (
 	"fmt"
 	"log"
@@ -12,14 +10,13 @@ import (
 )
 
 const (
-	DefaultListenAddr = ":7448"
+	DefaultListenAddr = ":7070"
 )
 
 var version = "master"
 
 func main() {
 	log.SetFlags(log.Lshortfile)
-
 	config := &config.Config{
 		ListenAddr: DefaultListenAddr,
 	}
@@ -29,6 +26,9 @@ func main() {
 	password, err := core.ParsePassword(config.Password)
 	if err != nil {
 		log.Fatalln(err)
+	}
+	if len(config.RemoteAddr) == 0 {
+		log.Fatalln("There is no remote in .ss.json")
 	}
 	listenAddr, err := net.ResolveTCPAddr("tcp", config.ListenAddr)
 	if err != nil {
@@ -49,6 +49,7 @@ remote remote：
 password password：
 %s
 	`, listenAddr, remoteAddr, password))
-		log.Printf("ssclient:%s sucessfully listen on %s\n", version, listenAddr.String())
+		log.Printf("ssclient:%s sucessfully listen on %s to remote address %s\n",
+			version, listenAddr.String(), remoteAddr.String())
 	}))
 }

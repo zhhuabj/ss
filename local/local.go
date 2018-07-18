@@ -32,9 +32,7 @@ func (local *LsLocal) Listen(didListen func(listenAddr net.Addr)) error {
 	if err != nil {
 		return err
 	}
-
 	defer listener.Close()
-
 	if didListen != nil {
 		didListen(listener.Addr())
 	}
@@ -54,22 +52,20 @@ func (local *LsLocal) Listen(didListen func(listenAddr net.Addr)) error {
 
 func (local *LsLocal) handleConn(userConn *net.TCPConn) {
 	defer userConn.Close()
-
 	proxyServer, err := local.DialRemote()
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	defer proxyServer.Close()
-	// Conn被关闭时直接清除所有数据 不管没有发送的数据
+	//Conn被关闭时直接清除所有数据不管没有发送的数据
 	proxyServer.SetLinger(0)
 
-	// 进行转发
-	// 从 proxyServer 读取数据发送到 localUser
+	// 进行转发, 从proxyServer读取数据发送到localUser
 	go func() {
 		err := local.DecodeCopy(userConn, proxyServer)
 		if err != nil {
-			// 在 copy 的过程中可能会存在网络超时等 error 被 return，只要有一个发生了错误就退出本次工作
+			// 在copy的过程中可能会存在网络超时等error被return，只要有一个发生了错误就退出本次工作
 			userConn.Close()
 			proxyServer.Close()
 		}
