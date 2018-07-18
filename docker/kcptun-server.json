@@ -1,0 +1,16 @@
+{
+  "listen": ":1194",
+  "target": "127.0.0.1:8261",
+  "key": "passw0rd",
+  "crypt": "none",
+  "mode": "fast3",
+  "mtu": 1350,
+  "sndwnd": 1024,
+  "rcvwnd": 1024,
+  "datashard": 10,
+  "parityshard": 3,
+  "dscp": 0,
+  "nocomp": false,
+  "quiet": false,
+  "pprof": false
+}

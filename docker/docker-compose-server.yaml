@@ -1,0 +1,18 @@
+version: '2.0' 
+services:
+  ss:
+    image: zhhuabj/simple-ss
+    container_name: ss
+    restart: always
+    volumes: 
+      - ./:/root
+    ports: 
+      - "8261:8261"
+    command: /go/bin/ssserver
+  kcptun:
+    image: xtaci/kcptun
+    container_name: kcptun
+    ports:
+      - "1194:1194/udp"
+    restart: always
+    command: server -t ss:8261 -l :1194 --key password --crypt none --mode fast3

@@ -1,0 +1,19 @@
+version: '2.0' 
+services:
+  ssserver:
+    image: zhhuabj/simple-ss
+    container_name: ss
+    restart: always
+    volumes: 
+      - ./:/root
+    ports: 
+      - "7071:7071"
+      - "1194:1194"
+    command: /go/bin/ssclient
+  kcptun:
+    image: xtaci/kcptun
+    container_name: kcptun
+    ports:
+      - "8261:8261/tcp"
+    restart: always
+    command: client -r <VPS-IP>:1194 -l :8261 --key password --crypt none --mode fast3
