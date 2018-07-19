@@ -36,7 +36,7 @@ services:
     ports:
       - "443:443/udp"
     restart: always
-    command: server -t ss:8261 -l :443 --key password --crypt none --mode fast3
+    command: server -t ss:8261 -l :443 --key password --crypt salsa20 --mode fast3
 EOF
 
 sudo docker-compose down
@@ -78,7 +78,7 @@ services:
     ports:
       - "8262:8262/tcp"
     restart: always
-    command: client -r <VPS-IP>:443 -l :8262 --key password --crypt none --mode fast3
+    command: client -r <VPS-IP>:443 -l :8262 --key password --crypt salsa20 --mode fast3
 EOF
 sudo docker-compose down
 sudo docker-compose up -d
