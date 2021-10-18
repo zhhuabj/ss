@@ -1,1 +1,6 @@
 # ss
+
+mv vendor vendor_bak
+GOARCH=arm GOARM=5 go get golang.org/x/crypto/ssh/terminal
+...
+GOARCH=arm GOARM=5 go build -v -o ./bin/ ...
